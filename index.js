@@ -96,15 +96,15 @@ class Car {
     }
   }
   drive(distance) {
-    this.odometer = this.odometer + distance;
-    this.tank = this.tank - distance / this.milesPerGallon;
-
-    if (distance < this.tank * this.milesPerGallon) {
-      this.odometer = this.odometer + distance;
-    } else if (distance > this.tank * this.milesPerGallon && this.tank <= 0) {
-      distance = this.tank * this.odometer;
-      return `I ran out of fuel at ${this.odometer} miles!`;
+    if (distance <= this.tank * this.milesPerGallon) {
+      this.odometer = distance;
+    } else if (distance > this.tank * this.milesPerGallon) {
+      distance = this.tank * this.milesPerGallon;
+      this.odometer = this.tank * this.milesPerGallon;
+      this.tank = this.tank - distance/this.milesPerGallon;
+      return `I ran out of fuel at ${this.odometer} miles!`
     }
+    this.tank = Math.round(this.tank - distance / this.milesPerGallon);
   }
 }
 const batmobile = new Car("Batmobile", 20);
@@ -114,9 +114,9 @@ console.log(batmobile.fill(10));
 console.log(batmobile);
 console.log(batmobile.fill(10));
 console.log(batmobile);
-console.log(batmobile.drive(200));
-console.log(batmobile.drive(199));
-console.log(batmobile.drive(2));
+console.log(batmobile.drive(401));
+console.log(batmobile);
+
 /*
   TASK 3
     - Write a Lambdasian class.
@@ -223,7 +223,7 @@ class ProjectManager extends Instructor {
   standUp(channel) {
     return `${this.name} announces to ${channel}, @channel standy times!`;
   }
-  debugsCode(Student, subject) {
+  debugsCode(student, subject) {
     return `${this.name} debugs ${student.name}'s code on ${subject}`;
   }
 }
