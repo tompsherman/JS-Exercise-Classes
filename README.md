@@ -1,6 +1,6 @@
 # The _class_ Syntax
 
-This challenge  focuses on using the new for ES6 `class` syntax.
+This challenge  focuses on u sing the new for ES6 `class` syntax.
 
 ## JavaScript Fundamentals
 
