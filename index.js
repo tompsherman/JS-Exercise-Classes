@@ -159,12 +159,19 @@ class Instructor extends Lambdasian {
     this.specialty = attr.specialty;
     this.favLanguage = attr.favLanguage;
     this.catchPhrase = attr.catchPhrase;
+    this.evaluater = attr.evaluater;
   }
   demo(subject) {
     return `Today we are learning about ${subject}`;
   }
   grade(student, subject) {
     return `${student.name} receives a perfect score on ${subject}`;
+  }
+  eval(student){
+    let plusOrMinus = Math.random() < .5 ? -1 : 1;
+    student.grade = student.grade - Math.round(Math.random()*20)*plusOrMinus
+    this.evaluater = student.grade
+    return this.evaluater
   }
 }
 
@@ -189,6 +196,7 @@ class Student extends Lambdasian {
     this.previousBackground = attr.previousBackground;
     this.className = attr.className;
     this.favSubjects = attr.favSubjects;
+    this.grade = attr.grade;
   }
   listSubjects() {
     return `Loving ${this.favSubjects}!`;
@@ -198,6 +206,14 @@ class Student extends Lambdasian {
   }
   sprintChallenge(subject) {
     return `${this.name} has begun sprint challenge on ${subject}`;
+  }
+  graduate(instructor){
+    
+    if(Number(instructor.evaluater) > 70){
+      return `CONGRATS GRAD!`
+    }else if(Number(instructor.evaluater) < 70){
+      return `keep trying, you'll get it!`
+    }
   }
 }
 
@@ -236,7 +252,37 @@ class ProjectManager extends Instructor {
       + This method, when called, will check the grade of the student and see if they're ready to graduate from Lambda School
       + If the student's grade is above a 70% let them graduate! Otherwise go back to grading their assignments to increase their score.
 */
+const lambda = new Lambdasian({
+  name: "Lambda",
+  age: 3,
+  location: "Silicon Valley"
+});
 
+const instructor = new Instructor({
+  name: "Brit",
+  age: 31,
+  location: "Canada",
+  specialty: "Unit 1",
+  favLanguage: "Fr. Canadian",
+  catchPhrase: "Clear. Save. Run.",
+  evaluater: ""
+})
+
+const student = new Student({
+  name: "Tom",
+  age: 31,
+  location: "Delaware",
+  specialty: "taking notes",
+  favLanguage: "Delawarian Friendly",
+  catchPhrase: "Holy Moly Shishkomboli!",
+  previousBackground: "comedian, inventor",
+  className: "WEB35",
+  favSubjects: "HTML, CSS, JAVASCRIPT!",
+  grade: 65 
+})
+
+console.log(instructor.eval(student));
+console.log(student.graduate(instructor));
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
