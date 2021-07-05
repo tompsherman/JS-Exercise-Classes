@@ -20,7 +20,8 @@ class Airplane {
     this.isFlying = false;
   }
 }
-
+const airp = new Airplane("Gulf Stream 550");
+console.log(airp);
 /*
 // 👇 COMPLETE YOUR WORK BELOW 👇
 // 👇 COMPLETE YOUR WORK BELOW 👇
@@ -41,8 +42,31 @@ class Airplane {
 */
 
 class Person {
-
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+    this.stomach = [];
+  }
+  eat(edible) {
+    if (this.stomach.length < 10) {
+      return this.stomach.push(edible);
+    }
+  }
+  poop() {
+    return (this.stomach = []);
+  }
+  toString() {
+    return `${this.name}, ${this.age}`;
+  }
 }
+
+const tom = new Person("tom", 31);
+
+console.log(tom);
+console.log(tom.eat("burrito"));
+console.log(tom.stomach);
+console.log(tom.poop());
+console.log(tom.toString());
 
 /*
   TASK 2
@@ -59,8 +83,39 @@ class Person {
 */
 
 class Car {
-
+  constructor(model, milesPerGallon) {
+    this.model = model;
+    this.milesPerGallon = milesPerGallon;
+    this.tank = 0;
+    this.odometer = 0;
+  }
+  fill(gallons) {
+    this.tank = this.tank + gallons;
+    if (this.tank <= 0) {
+      this.tank = 0;
+    }
+  }
+  drive(distance) {
+    if (distance <= this.tank * this.milesPerGallon) {
+      this.odometer = distance;
+    } else if (distance > this.tank * this.milesPerGallon) {
+      distance = this.tank * this.milesPerGallon;
+      this.odometer = this.tank * this.milesPerGallon;
+      this.tank = this.tank - distance/this.milesPerGallon;
+      return `I ran out of fuel at ${this.odometer} miles!`
+    }
+    this.tank = Math.round(this.tank - distance / this.milesPerGallon);
+  }
 }
+const batmobile = new Car("Batmobile", 20);
+
+console.log(batmobile);
+console.log(batmobile.fill(10));
+console.log(batmobile);
+console.log(batmobile.fill(10));
+console.log(batmobile);
+console.log(batmobile.drive(401));
+console.log(batmobile);
 
 /*
   TASK 3
@@ -75,9 +130,15 @@ class Car {
         + {name} and {location} of course come from the instance's own properties.
 */
 class Lambdasian {
-
+  constructor(attr) {
+    this.name = attr.name;
+    this.age = attr.age;
+    this.location = attr.location;
+  }
+  speak() {
+    return `Hello my name is ${this.name}, I am from ${this.location}`;
+  }
 }
-
 /*
   TASK 4
     - Write an Instructor class extending Lambdasian.
@@ -92,8 +153,26 @@ class Lambdasian {
         + `demo` receives a `subject` string as an argument and returns the phrase 'Today we are learning about {subject}' where subject is the param passed in.
         + `grade` receives a `student` object and a `subject` string as arguments and returns '{student.name} receives a perfect score on {subject}'
 */
-class Instructor {
-
+class Instructor extends Lambdasian {
+  constructor(attr) {
+    super(attr);
+    this.specialty = attr.specialty;
+    this.favLanguage = attr.favLanguage;
+    this.catchPhrase = attr.catchPhrase;
+    this.evaluater = attr.evaluater;
+  }
+  demo(subject) {
+    return `Today we are learning about ${subject}`;
+  }
+  grade(student, subject) {
+    return `${student.name} receives a perfect score on ${subject}`;
+  }
+  eval(student){
+    let plusOrMinus = Math.random() < .5 ? -1 : 1;
+    student.grade = student.grade - Math.round(Math.random()*20)*plusOrMinus
+    this.evaluater = student.grade
+    return this.evaluater
+  }
 }
 
 /*
@@ -111,8 +190,31 @@ class Instructor {
         + `PRAssignment` a method that receives a subject as an argument and returns `student.name has submitted a PR for {subject}`
         + `sprintChallenge` similar to PRAssignment but returns `student.name has begun sprint challenge on {subject}`
 */
-class Student {
-
+class Student extends Lambdasian {
+  constructor(attr) {
+    super(attr);
+    this.previousBackground = attr.previousBackground;
+    this.className = attr.className;
+    this.favSubjects = attr.favSubjects;
+    this.grade = attr.grade;
+  }
+  listSubjects() {
+    return `Loving ${this.favSubjects}!`;
+  }
+  PRAssignment(subject) {
+    return `${this.name} has submitted a PR for ${subject}`;
+  }
+  sprintChallenge(subject) {
+    return `${this.name} has begun sprint challenge on ${subject}`;
+  }
+  graduate(instructor){
+    
+    if(Number(instructor.evaluater) > 70){
+      return `CONGRATS GRAD!`
+    }else if(Number(instructor.evaluater) < 70){
+      return `keep trying, you'll get it!`
+    }
+  }
 }
 
 /*
@@ -128,8 +230,18 @@ class Student {
         + `standUp` a method that takes in a slack channel and returns `{name} announces to {channel}, @channel standy times!`
         + `debugsCode` a method that takes in a student object and a subject and returns `{name} debugs {student.name}'s code on {subject}`
 */
-class ProjectManager {
-
+class ProjectManager extends Instructor {
+  constructor(attr) {
+    super(attr);
+    this.gradClassName = attr.gradClassName;
+    this.favInstructor = attr.favInstructor;
+  }
+  standUp(channel) {
+    return `${this.name} announces to ${channel}, @channel standy times!`;
+  }
+  debugsCode(student, subject) {
+    return `${this.name} debugs ${student.name}'s code on ${subject}`;
+  }
 }
 
 /*
@@ -140,17 +252,61 @@ class ProjectManager {
       + This method, when called, will check the grade of the student and see if they're ready to graduate from Lambda School
       + If the student's grade is above a 70% let them graduate! Otherwise go back to grading their assignments to increase their score.
 */
+const lambda = new Lambdasian({
+  name: "Lambda",
+  age: 3,
+  location: "Silicon Valley"
+});
 
+const instructor = new Instructor({
+  name: "Brit",
+  age: 31,
+  location: "Canada",
+  specialty: "Unit 1",
+  favLanguage: "Fr. Canadian",
+  catchPhrase: "Clear. Save. Run.",
+  evaluater: ""
+})
+
+const student = new Student({
+  name: "Tom",
+  age: 31,
+  location: "Delaware",
+  specialty: "taking notes",
+  favLanguage: "Delawarian Friendly",
+  catchPhrase: "Holy Moly Shishkomboli!",
+  previousBackground: "comedian, inventor",
+  className: "WEB35",
+  favSubjects: "HTML, CSS, JAVASCRIPT!",
+  grade: 65 
+})
+
+console.log(instructor.eval(student));
+console.log(student.graduate(instructor));
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
-if (typeof exports !== 'undefined') {
-  module.exports = module.exports || {}
-  if (Airplane) { module.exports.Airplane = Airplane }
-  if (Person) { module.exports.Person = Person }
-  if (Car) { module.exports.Car = Car }
-  if (Lambdasian) { module.exports.Lambdasian = Lambdasian }
-  if (Instructor) { module.exports.Instructor = Instructor }
-  if (Student) { module.exports.Student = Student }
-  if (ProjectManager) { module.exports.ProjectManager = ProjectManager }
+if (typeof exports !== "undefined") {
+  module.exports = module.exports || {};
+  if (Airplane) {
+    module.exports.Airplane = Airplane;
+  }
+  if (Person) {
+    module.exports.Person = Person;
+  }
+  if (Car) {
+    module.exports.Car = Car;
+  }
+  if (Lambdasian) {
+    module.exports.Lambdasian = Lambdasian;
+  }
+  if (Instructor) {
+    module.exports.Instructor = Instructor;
+  }
+  if (Student) {
+    module.exports.Student = Student;
+  }
+  if (ProjectManager) {
+    module.exports.ProjectManager = ProjectManager;
+  }
 }
